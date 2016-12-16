@@ -1,0 +1,28 @@
+(comm:set-ssl-library-path "/usr/local/Cellar/openssl/1.0.2i/lib/libssl.dylib")
+
+export PATH=/usr/local/Cellar/openssl/1.0.2i/bin:$PATH
+
+(require "comm")
+(comm:ensure-ssl "/usr/local/Cellar/openssl/1.0.2i/lib/libssl.dylib")
+(comm:openssl-version)
+(comm:set-ssl-library-path "/usr/local/Cellar/openssl/1.0.2i/lib/libssl.dylib")
+(comm:ensure-ssl)
+(comm:openssl-version)
+(comm:open-tcp-stream "google.com" 443 :ssl-ctx t)
+
+(require "comm")
+
+(comm:ensure-ssl :library-path "/usr/local/Cellar/openssl/1.0.2i/lib/libssl.dylib")
+
+(comm:openssl-version :version)
+(comm:openssl-version :directory)
+(comm:openssl-version :platform)
+(comm:openssl-version :cflags)
+
+openssl s_client -connect docs-examples.firebaseio.com/rest/quickstart/users.json:443
+
+openssl s_client -connect www.feistyduck.com:443 -CAfile /etc/ssl/certs/ca-certificates.crt
+
+echo | openssl s_client -connect www.feistyduck.com:443 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > www.feistyduck.com.crt
+
+/opt/openssl-0.9.8k/bin/openssl s_client -connect www.feistyduck.com:443 -servername xyz.com

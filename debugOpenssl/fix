@@ -1,0 +1,36 @@
+cp $HOME/ssl-x86/openssl.cnf /usr/local/openssl.cnf
+cp $HOME/ssl-x86/include/openssl/* /usr/local/include/openssl
+cp $HOME/ssl-x86/include/openssl/opensslconf-x86.h /usr/local/include/openssl/opensslconf-x86.h
+cp $HOME/ssl-x64/include/openssl/opensslconf-x64.h /usr/local/include/openssl/opensslconf-x64.h
+cp $HOME/ssl-x86/include/openssl/bn-x86.h /usr/local/include/openssl/bn-x86.h
+cp $HOME/ssl-x64/include/openssl/bn-x64.h /usr/local/include/openssl/bn-x64.h
+
+lipo -create $HOME/ssl-x86/lib/libcrypto.a \
+             $HOME/ssl-x64/lib/libcrypto.a \
+             -output /usr/local/lib/libcrypto.a
+
+lipo -create $HOME/ssl-x86/lib/libssl.a \
+             $HOME/ssl-x64/lib/libssl.a \
+             -output /usr/local/lib/libssl.a
+
+lipo -create $HOME/ssl-x86/bin/openssl \
+             $HOME/ssl-x64/bin/openssl \
+             -output /usr/local/bin/openssl
+
+
+lipo -create $HOME/ssl-x86/lib/libcrypto.1.1.dylib \
+             $HOME/ssl-x64/lib/libcrypto.1.1.dylib \
+             -output /usr/local/lib/libcrypto.1.1.dylib
+
+lipo -create $HOME/ssl-x86/lib/libssl.1.1.dylib \
+             $HOME/ssl-x64/lib/libssl.1.1.dylib \
+             -output /usr/local/lib/libssl.1.1.dylib
+             -output $HOME/ssl/lib/libssl.1.0.0.dylib
+
+ln -s /usr/local/lib/libcrypto.1.1.dylib /usr/local/lib/libcrypto.dylib
+ln -s /usr/local/lib/libssl.1.1.dylib /usr/local/lib/libssl.dylib
+
+lipo -info /usr/local/lib/libssl.dylib
+
+clang -arch i386 -arch x86_64 -I /usr/local/include test.c -o test.exe -L /usr/local/lib -lssl -lcrypto
+clang -arch i386 -arch x86_64 -I $HOME/ssl/include test.c -o test.exe -L $HOME/ssl/lib -lssl -lcrypto

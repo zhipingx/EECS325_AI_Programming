@@ -1,0 +1,10 @@
+(in-package :cs325-user)
+
+(defun max-min (lst &key end (start 0))
+  (if (or (= start (length lst)) (and end (= start end)))
+      (values nil nil)
+    (multiple-value-bind (x y) (max-min lst :start (1+ start) :end end)
+      (let ((curr (svref lst start)))
+        (if (null x)
+            (values curr curr)
+          (values (max curr x) (min curr y)))))))
